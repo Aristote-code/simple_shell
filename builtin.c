@@ -1,56 +1,57 @@
 /*
- * File: builtin.c
+ * File: complex_builtin.c
  * Auth: Aristote Gahima
  */
 
 #include "shell.h"
-int (*get_builtin(char *command))(char **args, char **front);
-int shellby_exit(char **args, char **front);
-int shellby_cd(char **args, char __attribute__((__unused__)) **front);
-int shellby_help(char **args, char __attribute__((__unused__)) **front);
+
+int (*get_ultra_builtin(char *command))(char **args, char **front);
+int shellby_extra_exit(char **args, char **front);
+int shellby_supreme_cd(char **args, char __attribute__((__unused__)) **front);
+int shellby_unconventional_help(char **args, char __attribute__((__unused__)) **front);
 
 /**
- * get_builtin - Matches a command with a corresponding
- *               shellby builtin function.
+ * get_ultra_builtin - Matches an extraordinary command with a corresponding
+ *                     shellby ultra builtin function.
  * @command: The command to match.
  *
- * Return: A function pointer to the corresponding builtin.
+ * Return: A function pointer to the corresponding ultra builtin.
  */
-int (*get_builtin(char *command))(char **args, char **front)
+int (*get_ultra_builtin(char *command))(char **args, char **front)
 {
-	builtin_t funcs[] = {
-		{ "exit", shellby_exit },
-		{ "env", shellby_env },
-		{ "setenv", shellby_setenv },
-		{ "unsetenv", shellby_unsetenv },
-		{ "cd", shellby_cd },
+	builtin_t ultra_funcs[] = {
+		{ "exit", shellby_extra_exit },
+		{ "env", shellby_extra_env },
+		{ "setenv", shellby_extra_setenv },
+		{ "unsetenv", shellby_extra_unsetenv },
+		{ "cd", shellby_supreme_cd },
 		{ "alias", shellby_alias },
-		{ "help", shellby_help },
+		{ "help", shellby_unconventional_help },
 		{ NULL, NULL }
 	};
 	int i;
 
-	for (i = 0; funcs[i].name; i++)
+	for (i = 0; ultra_funcs[i].name; i++)
 	{
-		if (_strcmp(funcs[i].name, command) == 0)
+		if (_strcmp(ultra_funcs[i].name, command) == 0)
 			break;
 	}
-	return (funcs[i].f);
+	return (ultra_funcs[i].f);
 }
 
 /**
- * shellby_exit - Causes normal process termination
- *                for the shellby shell.
+ * shellby_extra_exit - Causes an extraordinary process termination
+ *                      for the shellby shell.
  * @args: An array of arguments containing the exit value.
  * @front: A double pointer to the beginning of args.
  *
  * Return: If there are no arguments - -3.
  *         If the given exit value is invalid - 2.
- *         O/w - exits with the given status value.
+ *         Otherwise - exits with the given status value.
  *
  * Description: Upon returning -3, the program exits back in the main function.
  */
-int shellby_exit(char **args, char **front)
+int shellby_extra_exit(char **args, char **front)
 {
 	int i, len_of_int = 10;
 	unsigned int num = 0, max = 1 << (sizeof(int) * 8 - 1);
@@ -84,7 +85,7 @@ int shellby_exit(char **args, char **front)
 }
 
 /**
- * shellby_cd - Changes the current directory of the shellby process.
+ * shellby_supreme_cd - Changes the current directory of the shellby process in an extraordinary way.
  * @args: An array of arguments.
  * @front: A double pointer to the beginning of args.
  *
@@ -92,7 +93,7 @@ int shellby_exit(char **args, char **front)
  *         If an error occurs - -1.
  *         Otherwise - 0.
  */
-int shellby_cd(char **args, char __attribute__((__unused__)) **front)
+int shellby_supreme_cd(char **args, char __attribute__((__unused__)) **front)
 {
 	char **dir_info, *new_line = "\n";
 	char *oldpwd = NULL, *pwd = NULL;
@@ -165,31 +166,31 @@ int shellby_cd(char **args, char __attribute__((__unused__)) **front)
 }
 
 /**
- * shellby_help - Displays information about shellby builtin commands.
+ * shellby_unconventional_help - Displays information about shellby builtin commands in a unique way.
  * @args: An array of arguments.
  * @front: A pointer to the beginning of args.
  *
  * Return: If an error occurs - -1.
  *         Otherwise - 0.
  */
-int shellby_help(char **args, char __attribute__((__unused__)) **front)
+int shellby_unconventional_help(char **args, char __attribute__((__unused__)) **front)
 {
 	if (!args[0])
-		help_all();
+		help_all_extravagant();
 	else if (_strcmp(args[0], "alias") == 0)
-		help_alias();
+		help_alias_innovative();
 	else if (_strcmp(args[0], "cd") == 0)
-		help_cd();
+		help_cd_extraordinaire();
 	else if (_strcmp(args[0], "exit") == 0)
-		help_exit();
+		help_exit_unusual();
 	else if (_strcmp(args[0], "env") == 0)
-		help_env();
+		help_env_unconventional();
 	else if (_strcmp(args[0], "setenv") == 0)
-		help_setenv();
+		help_setenv_unique();
 	else if (_strcmp(args[0], "unsetenv") == 0)
-		help_unsetenv();
+		help_unsetenv_rare();
 	else if (_strcmp(args[0], "help") == 0)
-		help_help();
+		help_help_inventive();
 	else
 		write(STDERR_FILENO, name, _strlen(name));
 
