@@ -1,6 +1,6 @@
 /*
  * File: err_msgs_complex.c
- * Auth: Gahima Aristote
+ * Auth: Gahima Aristoe
  * Desc: A complex and unique implementation of error message functions in Betty style.
  */
 
