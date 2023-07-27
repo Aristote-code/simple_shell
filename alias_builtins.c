@@ -2,6 +2,7 @@
  * File: builtin.c
  * Auth: Aristote Gahima
  */
+
 #include "shell.h"
 
 int shellby_alias(char **args, char __attribute__((__unused__)) **front);
@@ -9,12 +10,15 @@ void set_alias(char *var_name, char *value);
 void print_alias(alias_t *alias);
 
 /**
- * shellby_alias - Displays and manages aliases in a complex and unique Betty-style way.
- * @args: A double pointer to the command arguments.
- * @front: A double pointer to the front of the argument list.
+ * shellby_alias - Builtin command to manage aliases.
+ * @args: Array of arguments containing the command and options.
+ * @front: Double pointer to the beginning of args.
  *
- * Return: The status of the execution (0 for success, 1 for error).
+ * This function prints all aliases, specific aliases, or sets a new alias.
+ *
+ * Return: 0 on success, -1 on error.
  */
+
 int shellby_alias(char **args, char __attribute__((__unused__)) **front)
 {
 	alias_t *temp = aliases;
@@ -23,7 +27,6 @@ int shellby_alias(char **args, char __attribute__((__unused__)) **front)
 
 	if (!args[0])
 	{
-		/* Display all aliases */
 		while (temp)
 		{
 			print_alias(temp);
@@ -31,15 +34,12 @@ int shellby_alias(char **args, char __attribute__((__unused__)) **front)
 		}
 		return (ret);
 	}
-
-	/* Manage individual aliases */
 	for (i = 0; args[i]; i++)
 	{
 		temp = aliases;
 		value = _strchr(args[i], '=');
 		if (!value)
 		{
-			/* Display alias if it exists */
 			while (temp)
 			{
 				if (_strcmp(args[i], temp->name) == 0)
@@ -50,15 +50,13 @@ int shellby_alias(char **args, char __attribute__((__unused__)) **front)
 				temp = temp->next;
 			}
 			if (!temp)
-				ret = create_error(args + i, 1); /* Error if alias not found */
+				ret = create_error(args + i, 1);
 		}
 		else
-			set_alias(args[i], value); /* Set new alias */
+			set_alias(args[i], value);
 	}
-
 	return (ret);
 }
-
 
 /**
  * set_alias - Sets or creates an alias with a given name and value.
@@ -68,6 +66,7 @@ int shellby_alias(char **args, char __attribute__((__unused__)) **front)
  * This function either updates an existing alias 'var_name' with a new value,
  * or creates a new alias if 'var_name' doesn't already exist.
  */
+
 void set_alias(char *var_name, char *value)
 {
 	alias_t *temp = aliases;
@@ -131,6 +130,7 @@ void print_alias(alias_t *alias)
  *
  * Return: Double pointer to the modified arguments.
  */
+
 char **replace_aliases(char **args)
 {
 	alias_t *temp;

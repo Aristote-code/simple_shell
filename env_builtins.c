@@ -1,6 +1,7 @@
 /*
  * File: env_builtins.c
- * Auth: Aristote Gahima
+ * Auth: Alex Yu
+ *       Brennan D Baraban
  */
 
 #include "shell.h"

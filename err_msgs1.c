@@ -1,35 +1,23 @@
 /*
- * File: err_msgs_complex.c
- * Auth: Gahima Aristoe
- * Desc: A complex and unique implementation of error message functions in Betty style.
+ * File: err_msgs1.c
+ * Auth: Aristote Gahima
  */
 
 #include "shell.h"
 
+char *error_env(char **args);
+char *error_1(char **args);
+char *error_2_exit(char **args);
+char *error_2_cd(char **args);
+char *error_2_syntax(char **args);
 /**
- * struct error_node - Represents a node in the error message linked list.
- * @message: The error message string.
- * @next: Pointer to the next node in the linked list.
- */
-typedef struct error_node
-{
-	char *message;
-	struct error_node *next;
-} error_node_t;
-
-/* Global pointer to the error message linked list */
-static error_node_t *error_list = NULL;
-
-/**
- * create_error_message - Creates an error message for various shell errors.
- * @prefix: The prefix string for the error message.
+ * error_env - Creates an error message for shellby_env errors.
  * @args: An array of arguments passed to the command.
  *
- * Return: The error message string.
+ * Return: The error string.
  */
-char *create_error_message(const char *prefix, char **args)
+char *error_env(char **args)
 {
-	error_node_t *new_node, *prev_node = NULL;
 	char *error, *hist_str;
 	int len;
 
@@ -37,7 +25,8 @@ char *create_error_message(const char *prefix, char **args)
 	if (!hist_str)
 		return (NULL);
 
-	len = _strlen(name) + _strlen(hist_str) + _strlen(args[0]) + _strlen(prefix) + 10;
+	args--;
+	len = _strlen(name) + _strlen(hist_str) + _strlen(args[0]) + 45;
 	error = malloc(sizeof(char) * (len + 1));
 	if (!error)
 	{
@@ -49,47 +38,139 @@ char *create_error_message(const char *prefix, char **args)
 	_strcat(error, ": ");
 	_strcat(error, hist_str);
 	_strcat(error, ": ");
-	_strcat(error, prefix);
 	_strcat(error, args[0]);
-	_strcat(error, "\n");
+	_strcat(error, ": Unable to add/remove from environment\n");
 
 	free(hist_str);
+	return (error);
+}
 
-	/* Add the error message to the linked list */
-	new_node = malloc(sizeof(error_node_t));
-	if (!new_node)
-	{
-		free(error);
+/**
+ * error_1 - Creates an error message for shellby_alias errors.
+ * @args: An array of arguments passed to the command.
+ *
+ * Return: The error string.
+ */
+char *error_1(char **args)
+{
+	char *error;
+	int len;
+
+	len = _strlen(name) + _strlen(args[0]) + 13;
+	error = malloc(sizeof(char) * (len + 1));
+	if (!error)
 		return (NULL);
-	}
 
-	new_node->message = error;
-	new_node->next = NULL;
-
-	if (prev_node)
-		prev_node->next = new_node;
-	else
-		error_list = new_node;
-
-	prev_node = new_node;
+	_strcpy(error, "alias: ");
+	_strcat(error, args[0]);
+	_strcat(error, " not found\n");
 
 	return (error);
 }
 
 /**
- * free_error_messages - Frees the error message linked list.
+ * error_2_exit - Creates an error message for shellby_exit errors.
+ * @args: An array of arguments passed to the command.
+ *
+ * Return: The error string.
  */
-void free_error_messages(void)
+char *error_2_exit(char **args)
 {
-	error_node_t *current_node = error_list, *next_node;
+	char *error, *hist_str;
+	int len;
 
-	while (current_node)
+	hist_str = _itoa(hist);
+	if (!hist_str)
+		return (NULL);
+
+	len = _strlen(name) + _strlen(hist_str) + _strlen(args[0]) + 27;
+	error = malloc(sizeof(char) * (len + 1));
+	if (!error)
 	{
-		next_node = current_node->next;
-		free(current_node->message);
-		free(current_node);
-		current_node = next_node;
+		free(hist_str);
+		return (NULL);
 	}
 
-	error_list = NULL;
+	_strcpy(error, name);
+	_strcat(error, ": ");
+	_strcat(error, hist_str);
+	_strcat(error, ": exit: Illegal number: ");
+	_strcat(error, args[0]);
+	_strcat(error, "\n");
+
+	free(hist_str);
+	return (error);
+}
+
+/**
+ * error_2_cd - Creates an error message for shellby_cd errors.
+ * @args: An array of arguments passed to the command.
+ *
+ * Return: The error string.
+ */
+char *error_2_cd(char **args)
+{
+	char *error, *hist_str;
+	int len;
+
+	hist_str = _itoa(hist);
+	if (!hist_str)
+		return (NULL);
+
+	if (args[0][0] == '-')
+		args[0][2] = '\0';
+	len = _strlen(name) + _strlen(hist_str) + _strlen(args[0]) + 24;
+	error = malloc(sizeof(char) * (len + 1));
+	if (!error)
+	{
+		free(hist_str);
+		return (NULL);
+	}
+
+	_strcpy(error, name);
+	_strcat(error, ": ");
+	_strcat(error, hist_str);
+	if (args[0][0] == '-')
+		_strcat(error, ": cd: Illegal option ");
+	else
+		_strcat(error, ": cd: can't cd to ");
+	_strcat(error, args[0]);
+	_strcat(error, "\n");
+
+	free(hist_str);
+	return (error);
+}
+
+/**
+ * error_2_syntax - Creates an error message for syntax errors.
+ * @args: An array of arguments passed to the command.
+ *
+ * Return: The error string.
+ */
+char *error_2_syntax(char **args)
+{
+	char *error, *hist_str;
+	int len;
+
+	hist_str = _itoa(hist);
+	if (!hist_str)
+		return (NULL);
+
+	len = _strlen(name) + _strlen(hist_str) + _strlen(args[0]) + 33;
+	error = malloc(sizeof(char) * (len + 1));
+	if (!error)
+	{
+		free(hist_str);
+		return (NULL);
+	}
+
+	_strcpy(error, name);
+	_strcat(error, ": ");
+	_strcat(error, hist_str);
+	_strcat(error, ": Syntax error: \"");
+	_strcat(error, args[0]);
+	_strcat(error, "\" unexpected\n");
+
+	free(hist_str);
+	return (error);
 }
